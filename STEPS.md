@@ -1,26 +1,20 @@
-# IBMZ-Techbytes
-
-## Abstract :
-Making career choices and AI based counselling accessible to every child at secondary level along with aptitude tests and detailed career paths. Students are often confused with the career choices and nowadays generation has big dreams of what they want to become. But they can no clarification and idea about the domain.Our Idea is a career based E-learning platform that has a personalized learning path based on individual learning styles and career choice
-Secondary Students are the main users, they have to go through a assessment model and with that we suggest them a few career options
-And the student can choose which best suits them and interests them. And then we provide a roadmap for them, on how to start preparing for that career. With the data we get from the test, we analyze and give them right roadmap and suggestions for better career planning.
-
 ## Algorithm :
 
 ### Step 1:
 ``` Import Matplotlib
+
 Import the matplotlib.pyplot module using the alias plt.
 ```
 ### Step 2:
 ```
-Define a Function to Get Marks Define a Python function get_marks(domain) that takes the name of a domain as an argument.
+ Define a Function to Get Marks Define a Python function get_marks(domain) that takes the name of a domain as an argument.
 Inside the function, prompt the user to enter marks for the specified domain.
 Convert the user input to an integer using int().
 Return the entered marks.
 ```
 ### Step 3:
 ```
-Define a List of Domains Create a list called domains to store the names of the domains for which you want to collect marks (e.g., "Computer Science," "ECE," "Graphic Design," and "Aerospace").
+ Define a List of Domains Create a list called domains to store the names of the domains for which you want to collect marks (e.g., "Computer Science," "ECE," "Graphic Design," and "Aerospace").
 ```
 ### Step 4: 
 ```
@@ -29,7 +23,7 @@ Initialize a Dictionary for Marks Initialize an empty dictionary called marks_di
 
 ### Step 5:
 ```
-Get Marks for Each Domain Use a for loop to iterate through each domain in the domains list.
+ Get Marks for Each Domain Use a for loop to iterate through each domain in the domains list.
 Inside the loop, call the get_marks function for each domain to collect the user's input for marks.
 Store the entered marks in the marks_dict dictionary with the domain name as the key.
 ```
@@ -53,16 +47,12 @@ Display the Graph Call plt.show() to display the graph with the entered marks an
 The user will see a bar graph showing the results based on the percentages of marks in different domains
 ```
 
-#
-
 ### Import Package :
 
 ```
 pip install matplotlib
 ```
 Matplotlib is a widely used Python library for creating static, animated, and interactive visualizations in a variety of formats, including line charts, bar charts, scatter plots, and more. It provides a flexible and user-friendly way to generate high-quality plots and graphs for data visualization and scientific illustration. With its rich set of features and customization options, Matplotlib is a powerful tool for researchers, data scientists, and engineers to convey data insights and present results in a clear and visually appealing manner. You can easily install Matplotlib using pip install matplotlib to get started with creating informative and aesthetically pleasing plots in your Python projects.
-
-#
 
 ### Program:
 ```python
@@ -120,5 +110,3 @@ Enter marks for Aerospace: 9
 
 ### Sample Result 2 :
 ![Sample](/sample2.png)
-
-
