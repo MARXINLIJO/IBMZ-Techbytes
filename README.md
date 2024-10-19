@@ -65,60 +65,107 @@ Matplotlib is a widely used Python library for creating static, animated, and in
 #
 
 ### Program:
-```python
+```
+# Import necessary libraries
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+# Import the necessary library for one-hot encoding
+from sklearn.preprocessing import OneHotEncoder
 
-# Function to get marks from the user for each domain
-def get_marks(domain):
-    marks = int(input(f"Enter marks for {domain}: "))
-    return marks
+# Step 1: Load the dataset
+df = pd.read_csv('ai4i2020.csv')
 
-# List of domains
-domains = ["Computer Science", "ECE", "Graphic Design", "Aerospace"]
+# ... (Rest of your code for EDA and data preprocessing) ...
 
-# Initialize a dictionary to store domain names and marks
-marks_dict = {}
+# Step 3: Data Preprocessing (with One-Hot Encoding)
+# ... (handle missing values if needed) ...
 
-# Get marks for each domain
-for domain in domains:
-    marks = get_marks(domain)
-    marks_dict[domain] = marks
+# Define features (sensor data) and target (failure)
+# Replace 'failure' and 'timestamp' with the actual column names from the output above
+X = df.drop(columns=['UDI', 'Product ID', 'Machine failure'])  # All columns except target and id columns
+y = df['Machine failure']  # Target variable # Changed 'Target' to 'Machine failure'
 
-# Calculate percentages
-total_marks = sum(marks_dict.values())
-percentage_dict = {domain: (marks / total_marks) * 100 for domain, marks in marks_dict.items()}
+# Perform One-Hot Encoding for the 'Type' column
+# 1. Create a OneHotEncoder object
+encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore') # sparse=False for compatibility with RandomForest
 
-# Plot the results
-plt.figure(figsize=(8, 6))
-plt.bar(percentage_dict.keys(), percentage_dict.values())
-plt.xlabel("Domains")
-plt.ylabel("Percentage")
-plt.title("Results Based on Marks")
-plt.ylim(0, 100)
+# 2. Fit the encoder on the 'Type' column and transform it
+encoded_type = encoder.fit_transform(X[['Type']]) 
 
-# Display the graph
+# 3. Create a DataFrame from the encoded data
+encoded_type_df = pd.DataFrame(encoded_type, columns=encoder.get_feature_names_out(['Type']))
+
+# 4. Drop the original 'Type' column and concatenate the encoded columns
+X = X.drop(columns=['Type'])
+X = pd.concat([X, encoded_type_df], axis=1)
+
+# Split the data into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# ... (Rest of your code for model training and evaluation) ...
+# Step 4: Model Training
+# Initialize the Random Forest Classifier
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Step 5: Model Evaluation
+# Predict the results on the test set
+y_pred = model.predict(X_test)
+
+# Check the accuracy and classification report
+print("Accuracy Score:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Classification Report:\n", classification_report(y_test, y_pred))
+
+# Plot the Confusion Matrix for better visualization
+plt.figure(figsize=(6,4))
+sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d', cmap='Blues')
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
 plt.show()
 
-```
-### Sample Input 1 :
-```
-Enter marks for Computer Science: 5
-Enter marks for ECE: 8
-Enter marks for Graphic Design: 5
-Enter marks for Aerospace: 9
-```
-### Sample Result 1 :
-![Sample](/sample.png)
+# Feature Importance
+importances = model.feature_importances_
+indices = np.argsort(importances)[::-1]
 
-### Sample Input 2 :
+plt.figure(figsize=(10,6))
+plt.title("Feature Importances")
+plt.bar(range(X.shape[1]), importances[indices], align="center")
+plt.xticks(range(X.shape[1]), X.columns[indices], rotation=90)
+plt.tight_layout()
+plt.show()
+
+# ... (Your previous code) ...
+
+# Step 6: Use the model for future predictions
+# Assuming the new data point is of 'Type_L'
+# Replace with actual sensor values and adjust the number of features, including one-hot encoded 'Type'
+
+# The values for 'Type' should be one-hot encoded and added in the same order as during training
+# For 'Type_L', the encoding is [0, 1, 0] (Type_H, Type_L, Type_M)
+# So, new_sensor_data should have 13 elements (10 original + 3 encoded type)
+new_sensor_data = [[55, 300, 80, 75, 90, 10, 70, 80, 95, 10, 0, 1, 0]]  # Replace with actual sensor values, removing the extra values
+# Create the DataFrame with all column names except the target variable
+new_sensor_data_df = pd.DataFrame(new_sensor_data, columns=X.columns) # Use all columns of X as column names
+
+# Now use the data for prediction
+prediction = model.predict(new_sensor_data_df)  
+print("Predicted Failure Status (1 = Fail, 0 = No Fail):", prediction)
 ```
-Enter marks for Computer Science: 5
-Enter marks for ECE: 8
-Enter marks for Graphic Design: 5
-Enter marks for Aerospace: 9
-```
+
+### Sample Result 1 :
+![Screenshot 2024-10-20 001716](https://github.com/user-attachments/assets/f8760ee6-3a77-45ea-b3dc-7278b0fb0fe1)
 
 ### Sample Result 2 :
-![Sample](/sample2.png)
+![Screenshot 2024-10-20 001758](https://github.com/user-attachments/assets/ee3536de-80f2-4132-b786-44610ddda79c)
+
 
 
